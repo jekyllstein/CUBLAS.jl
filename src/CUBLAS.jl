@@ -9,10 +9,11 @@
 __precompile__(true)
 module CUBLAS
 
-importall Base.LinAlg.BLAS
+using LinearAlgebra.BLAS
+using Libdl
 
 using CUDAdrv
-using CUDAdrv: OwnedPtr, CuArray, CuVector, CuMatrix
+using CUDAdrv: CuArray, CuVector, CuMatrix
 
 CuVecOrMat{T} = Union{CuVector{T},CuMatrix{T}}
 
@@ -68,19 +69,19 @@ function statuscheck(status)
     # Because try/finally may disguise the source of the problem,
     # let's show a backtrace here
     warn("CUBLAS error triggered from:")
-    Base.show_backtrace(STDOUT, backtrace())
+    Base.show_backtrace(stdout, backtrace())
     println()
     throw(statusmessage(status))
 end
 
 # find the cublas library
-const libcublas = Libdl.find_library(["libcublas"], ["/usr/local/cuda","/usr/local/cuda/lib64/"])
+const libcublas = Libdl.find_library(["cublas64_90"], ["C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v9.0\\bin"])
 if isempty(libcublas)
     error("CUBLAS library cannot be found. Please make sure that CUDA is installed")
 end
 
 # Typedef needed by libcublas
-const cudaStream_t = Ptr{Void}
+const cudaStream_t = Ptr{Nothing}
 
 include("libcublas.jl")
 

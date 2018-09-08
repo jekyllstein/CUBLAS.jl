@@ -1,11 +1,11 @@
-import Base.Operators.(*)
+# import Base.Operators.(*)
 
-import Base: scale!, norm, vecdot
+# import Base: scale!, norm, vecdot
 
-import Base: A_mul_B!, At_mul_B,  A_mul_Bt,  Ac_mul_B,  A_mul_Bc,  At_mul_Bt,  Ac_mul_Bc,  At_mul_Bt,
-                       At_mul_B!, A_mul_Bt!, Ac_mul_B!, A_mul_Bc!, At_mul_Bt!, Ac_mul_Bc!, At_mul_Bt!
+# import Base: A_mul_B!, At_mul_B,  A_mul_Bt,  Ac_mul_B,  A_mul_Bc,  At_mul_Bt,  Ac_mul_Bc,  At_mul_Bt,
+#                        At_mul_B!, A_mul_Bt!, Ac_mul_B!, A_mul_Bc!, At_mul_Bt!, Ac_mul_Bc!, At_mul_Bt!
 
-cublas_size(t::Char, M::CuVecOrMat) = (size(M, t=='N' ? 1:2), size(M, t=='N' ? 2:1))
+cublas_size(t::Char, M::CuVecOrMat) = (size(M, t=='N' ? 1 : 2), size(M, t=='N' ? 2 : 1))
 
 ###########
 #
@@ -21,7 +21,7 @@ scale!(x::CuArray{T}, k::Number) where {T<:CublasFloat} = CUBLAS.scal!(length(x)
 #######
 # DOT
 #######
-function dot(x::CuVector{T}, rx::Union{UnitRange{TI},Range{TI}}, y::CuVector{T}, ry::Union{UnitRange{TI},Range{TI}}) where {T <: CublasFloat, TI<:Integer}
+function dot(x::CuVector{T}, rx::Union{UnitRange{TI},AbstractRange{TI}}, y::CuVector{T}, ry::Union{UnitRange{TI},AbstractRange{TI}}) where {T <: CublasFloat, TI<:Integer}
     if length(rx) != length(ry)
         throw(DimensionMismatch("length of rx, $(length(rx)), does not equal length of ry, $(length(ry))"))
     end
